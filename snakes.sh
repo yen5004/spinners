@@ -2,6 +2,7 @@
 
 # Function to start the spinner
 startSpinner() {
+    tput civis # hides the cursor
     spinner &
     SPINNER_PID=$!
     disown
