@@ -4,8 +4,8 @@
 startPacmanReveal() {
     local input="$1"
     local revealed=""  # Holds the revealed part of the input
-    local hidden="${input//?/#}"  # Replace each character with '#'
-    local length=${#input}
+    local length=${#input}  # Length of the input
+    local hidden=$(printf '#%.0s' $(seq 1 $length))  # Generate a string of '#' matching the input length
     local pacman_frames=( "◐" "◓" "◑" "◒" )
 
     tput civis  # Hide the cursor
@@ -18,7 +18,7 @@ startPacmanReveal() {
         # Reveal one character every second
         if (( elapsed < length )); then
             revealed="${input:0:elapsed}"
-            hidden="${hidden:1}"
+            hidden=$(printf '#%.0s' $(seq 1 $(( length - elapsed ))))  # Adjust '#' to remaining unrevealed characters
         else
             revealed="$input"
             hidden=""
