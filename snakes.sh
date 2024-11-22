@@ -32,16 +32,17 @@ spinner() {
         printf -v shs[pnt] '%b' "\U28${chr: -4:2}\U28${chr: -2}"
     done
 
-    eval "${FUNCNAME[0]}() {
-        local shs=( ${shs[*]@Q} )
-        local -i pnt
-        printf '\e7'
-        while ! read -rsn1 -t \"\${1:-.02}\"; do
-            printf '%b\e8' \"\${shs[pnt++%${#shs[@]}]}\"
-        done
-    }"
-}
 
+    while :; do
+        for pnt in "${shs[@]}"; do
+            printf '\e7%b\e8' "$pnt"
+            sleep 0.02
+        done
+        if read -rsn1 -t 0.02; then
+            break
+        fi
+    done
+}
 # Function to stop the spinner
 stopSpinner() {
     kill "$SPINNER_PID" 2>/dev/null
